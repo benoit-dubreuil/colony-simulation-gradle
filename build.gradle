@@ -51,18 +51,20 @@ subprojects {
     }
 }
 
+configure(subprojects.findAll { it.name.contains('library') || it.name == 'assets' }) {
+    apply plugin: 'java-library'
+}
+
 configure(subprojects.findAll { it.name != 'assets' }) {
     dependencies {
-        compile project(path: ':assets', configuration: 'assetLibrary')
-
         compile getJmeLocalMavenDependency('lwjgl3')
-
-        compile group: 'com.sudoplay.joise', name: 'joise', version: '1.1.0'
     }
 }
 
-configure(subprojects.findAll { it.name.contains('library') || it.name == 'assets' }) {
-    apply plugin: 'java-library'
+configure(subprojects.findAll { it.name != 'game-library' }) {
+    dependencies {
+        compile project(':game-library')
+    }
 }
 
 configure(project(':game')) {
@@ -81,5 +83,7 @@ configure(project(':game')) {
 
     dependencies {
         compile getJmeLocalMavenDependency('desktop')
+        compile project(path: ':assets', configuration: 'assetLibrary')
+        compile group: 'com.sudoplay.joise', name: 'joise', version: '1.1.0'
     }
 }

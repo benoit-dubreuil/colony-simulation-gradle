@@ -18,5 +18,5 @@ include 'game-library'
 include 'game'
 
 setFlatProjectDir(project(":assets"), 'Assets')
-setFlatProjectDir(project(":game-library"), 'GameLibrary')
+setFlatProjectDir(project(":game-library"), 'Game_Library')
 setFlatProjectDir(project(":game"), 'Game')
