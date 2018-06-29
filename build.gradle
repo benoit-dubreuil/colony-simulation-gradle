@@ -55,6 +55,13 @@ configure(subprojects.findAll { it.name.contains('library') || it.name == 'asset
     apply plugin: 'java-library'
 }
 
+configure(subprojects.findAll { it.name.contains('game') }) {
+    dependencies {
+        compile group: 'com.badlogicgames.gdx', name: 'gdx', version: '1.9.8'
+        compile group: 'com.badlogicgames.gdx', name: 'gdx-ai', version: '1.8.1'
+    }
+}
+
 configure(subprojects.findAll { it.name != 'assets' }) {
     dependencies {
         compile getJmeLocalMavenDependency('lwjgl3')
