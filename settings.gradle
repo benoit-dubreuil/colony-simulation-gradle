@@ -1,2 +1,22 @@
-rootProject.name = 'colonysimulation'
+import org.gradle.api.initialization.ProjectDescriptor
 
+final String COLONY_SIMULATION = 'ColonySimulation_'
+final String COLONY_SIMULATION_PROTOTYPE = COLONY_SIMULATION + 'Prototype_'
+final String COLONY_SIMULATION_ROOT_FOLDER = settingsDir.getParentFile()
+final String PROTOTYPE = 'prototype'
+
+void setFlatProjectDir(ProjectDescriptor flatProject, String projectEndFolderName) {
+    String projectBeginFolderName = 'ColonySimulation_'
+    if (flatProject.name.contains('prototype'))
+        projectBeginFolderName += 'Prototype_'
+
+    flatProject.projectDir = new File(settingsDir.getParentFile(), projectBeginFolderName + projectEndFolderName)
+}
+
+include 'assets'
+include 'game-library'
+include 'game'
+
+setFlatProjectDir(project(":assets"), 'Assets')
+setFlatProjectDir(project(":game-library"), 'GameLibrary')
+setFlatProjectDir(project(":game"), 'Game')

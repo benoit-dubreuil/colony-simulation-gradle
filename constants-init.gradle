@@ -1,0 +1,28 @@
+allprojects {
+    ext {
+        colonySimulation = [
+                ColonySimulation : 'ColonySimulation',
+                Prototype : 'Prototype'
+        ]
+        colonySimulation['ColonySimulation_'] = "${colonySimulation.ColonySimulation}_"
+        colonySimulation['Prototype_'] = "${colonySimulation.Prototype}_"
+        colonySimulation['ColonySimulation_Prototype'] = "${colonySimulation.ColonySimulation_}${colonySimulation.Prototype}"
+        colonySimulation['ColonySimulation_Prototype_'] = "${colonySimulation.ColonySimulation_Prototype}${colonySimulation.Prototype_}"
+        colonySimulation['prototype'] = colonySimulation.Prototype.toLowerCase()
+
+        jme = [
+                folder : new File(rootDir.getParent(), "${colonySimulation.ColonySimulation_}jMonkey_Engine"),
+                group : 'org.jmonkeyengine',
+                mainVersion : '3.2',
+                version : '3.2.0',
+                alias : 'jme3',
+                jarFolder : 'build/libs/'
+        ]
+    }
+}
+
+apply from: file('version.gradle')
+
+subprojects {
+    ext.jme = rootProject.jme
+}

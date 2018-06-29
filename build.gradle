@@ -1,15 +1,85 @@
-group 'com.cheesygames.colonysimulation'
-version '0.0.1-SNAPSHOT'
+apply from: file('constants-init.gradle')
 
-apply plugin: 'java'
-
-sourceCompatibility = 1.9
-targetCompatibility = 1.9
-
-repositories {
-    mavenCentral()
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.1.0'
+    }
 }
 
-dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+allprojects {
+    apply plugin: 'idea'
+
+    group 'com.cheesygames.colonysimulation'
+    version '0.0.1-SNAPSHOT'
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'org.junit.platform.gradle.plugin'
+
+    sourceCompatibility = 1.9
+    targetCompatibility = 1.9
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        jcenter()
+
+        maven {
+            url "https://dl.bintray.com/stephengold/org.jmonkeyengine/"
+        }
+    }
+
+    dependencies {
+        compile getJmeLocalMavenDependency('core')
+
+        testCompile(
+                'org.junit.jupiter:junit-jupiter-api:5.1.0'
+        )
+        testRuntime(
+                'org.junit.jupiter:junit-jupiter-engine:5.1.0',
+                'org.junit.platform:junit-platform-launcher:1.1.0',
+                'org.junit.platform:junit-platform-runner:1.1.0'
+        )
+    }
+
+    junitPlatform {
+        details 'tree'
+    }
+}
+
+configure(subprojects.findAll { it.name != 'assets' }) {
+    dependencies {
+        compile project(path: ':assets', configuration: 'assetLibrary')
+
+        compile getJmeLocalMavenDependency('lwjgl3')
+
+        compile group: 'com.sudoplay.joise', name: 'joise', version: '1.1.0'
+    }
+}
+
+configure(subprojects.findAll { it.name.contains('library') || it.name == 'assets' }) {
+    apply plugin: 'java-library'
+}
+
+configure(project(':game')) {
+    apply plugin: 'application'
+
+    task runApp(type: JavaExec) {
+        classpath = sourceSets.main.runtimeClasspath
+        enableAssertions = true
+    }
+
+    task debugApp(type: JavaExec) {
+        classpath = sourceSets.main.runtimeClasspath
+        enableAssertions = true
+        debug = true
+    }
+
+    dependencies {
+        compile getJmeLocalMavenDependency('desktop')
+    }
 }
