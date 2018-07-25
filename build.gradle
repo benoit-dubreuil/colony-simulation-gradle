@@ -41,6 +41,11 @@ subprojects {
 
         // show standard out and standard error of the test JVM(s) on the console
         testLogging.showStandardStreams = true
+        enableAssertions = true
+
+        testLogging {
+            events 'PASSED', 'FAILED', 'SKIPPED'
+        }
     }
 }
 
